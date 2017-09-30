@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -41,7 +42,12 @@ public class AuthorizationServer {
 	private static Logger log = LoggerFactory.getLogger(AuthorizationServer.class);
 
 	public static void main(String[] args) {
-		SpringApplication.run(AuthorizationServer.class, args);
+		ConfigurableApplicationContext ctx = null;
+		try {
+			ctx = SpringApplication.run(AuthorizationServer.class, args);
+		} finally {
+			ctx.close();
+		}
 	}
 	
 	@RequestMapping(value="/user", produces="application/json") 
