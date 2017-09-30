@@ -22,10 +22,10 @@ node('maven') {
  		sh "${mvnCmd} org.jacoco:jacoco-maven-plugin:report sonar:sonar -Dsonar.host.url=http://sonarqube:9000/ -DskipTests=true"
    	}
    	
-   	stage ('Test') {
-   		sh "${mvnCmd} test"
-   		step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-   	}
+//   	stage ('Test') {
+//   		sh "${mvnCmd} test"
+//   		step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+//   	}
    
  //  	stage ('Push to Nexus') {
  //  		sh "${mvnCmd} deploy -DskipTests=true"
