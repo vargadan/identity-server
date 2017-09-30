@@ -60,7 +60,7 @@ public class AuthorizationServer {
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.inMemoryAuthentication().withUser("hello").password("bello").roles("USER", "ADMIN", "SUPERUSER");
+			auth.inMemoryAuthentication().withUser("hello").password("bello").roles("USER", "ADMIN", "SUPERUSER", "ACTUATOR");
 		}
 
 		@Override
