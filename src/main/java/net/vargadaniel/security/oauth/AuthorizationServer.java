@@ -42,12 +42,7 @@ public class AuthorizationServer {
 	private static Logger log = LoggerFactory.getLogger(AuthorizationServer.class);
 
 	public static void main(String[] args) {
-		ConfigurableApplicationContext ctx = null;
-		try {
-			ctx = SpringApplication.run(AuthorizationServer.class, args);
-		} finally {
-			ctx.close();
-		}
+		SpringApplication.run(AuthorizationServer.class, args);
 	}
 	
 	@RequestMapping(value="/user", produces="application/json") 
