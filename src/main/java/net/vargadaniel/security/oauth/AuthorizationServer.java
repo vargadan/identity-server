@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -60,7 +59,9 @@ public class AuthorizationServer {
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.inMemoryAuthentication().withUser("hello").password("bello").roles("USER", "ADMIN", "SUPERUSER", "ACTUATOR");
+			auth.inMemoryAuthentication().withUser("dani").password("Password1234").roles("USER", "ADMIN", "SUPERUSER", "ACTUATOR")
+			.and().withUser("repop").password("Password1234").roles("REPORT_OPERATOR")
+			.and().withUser("repuser").password("Password1234").roles("REPORT_OPERATOR");
 		}
 
 		@Override
@@ -123,7 +124,7 @@ public class AuthorizationServer {
 
 		@Override
 		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-			clients.inMemory().withClient("acme").secret("acme_secret")
+			clients.inMemory().withClient("reportclient").secret("reportsecret")
 					.authorizedGrantTypes("refresh_token", "password", "client_credentials").scopes("webclient");
 		}
 	}
