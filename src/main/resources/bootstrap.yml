@@ -2,5 +2,5 @@ spring:
    application:
       name: identity-server
    cloud:
-      config:
-         uri: http://report-config-server:8080/
+#      config:
+#         uri: http://report-config-server:8080/
