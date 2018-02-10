@@ -12,11 +12,6 @@ node('maven') {
    	}
    	
    	def version = version()
-   	
-	   	stage ('Test') {
-   			sh "${mvnCmd} test"
-   			step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-	   	}   
 
    	stage ('Deploy DEV') {
 	   // clean up. keep the image stream
