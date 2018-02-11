@@ -5,6 +5,14 @@ node('maven') {
    	def IT_PROJECT = "reportengine-it"
    	def PORT = 8080
    	def APP_NAME = "identity-server"
+   	
+   	stage ('Init') {
+   	   //  show service account with context
+   	   sh "oc whoami -c"
+   	   // check if it has access to project
+	   sh "oc project ${DEV_PROJECT}"
+   	}
+   	
 
    	stage ('Build') {
    		git branch: 'master', url: 'https://github.com/vargadan/identity-server.git'
@@ -14,8 +22,6 @@ node('maven') {
    	def version = version()
 
    	stage ('Deploy DEV') {
-	   // clean up. keep the image stream
-	   sh "oc project ${DEV_PROJECT}"
 	   sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${APP_NAME} -n ${DEV_PROJECT}"
 	   // create build. override the exit code since it complains about exising imagestream
 	   sh "${mvnCmd} fabric8:deploy -DskipTests"
