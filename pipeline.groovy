@@ -8,7 +8,7 @@ node('maven') {
    	
    	stage ('Init') {
    	   //  show service account with context
-   	   sh "oc whoami -c"
+   	   sh "oc whoami"
    	   // check if it has access to project
 	   sh "oc project ${DEV_PROJECT}"
    	}
