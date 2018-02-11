@@ -33,11 +33,11 @@ node('maven') {
 	   // deploy stage image
 	   sh "oc new-app ${APP_NAME}:${version} -n ${IT_PROJECT}" 
 	   // delete service and route because new-app created them with wrong port
-	   sh "oc delete svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
+	   // sh "oc delete svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
 	   // create service with the right port 
-	   sh "oc expose dc ${APP_NAME} --port=${PORT}"
+	   // sh "oc expose dc ${APP_NAME} --port=${PORT}"
 	   // create route with the right port
-	   sh "oc expose svc ${APP_NAME}"
+	   // sh "oc expose svc ${APP_NAME}"
 	}
 }
 
