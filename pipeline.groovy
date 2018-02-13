@@ -19,8 +19,7 @@ node('maven') {
 	   	// create build. override the exit code since it complains about exising imagestream
 	   	//tag for version in DEV imagestream
 	   	sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:latest"
-		//envSetup(DEV_PROJECT, APP_NAME, true)
-		sh "oc new-app ${APP_NAME} --image-stream=${DEV_PROJECT}/${APP_NAME}:latest -n ${DEV_PROJECT}"
+		envSetup(DEV_PROJECT, APP_NAME, true)
 	}
 
    	stage ('Promote to QA') {
@@ -38,8 +37,8 @@ def envSetup(project, appName, recreate) {
 	if (recreate) {
 		sh "oc delete buildconfig,deploymentconfig,service,routes -l app=${appName} -n ${project}"
 	}
-   	//sh "oc new-app ${appName} --image-stream=${DEV_PROJECT}/${appName}:latest -n ${project}"
-   	//sh "oc expose svc ${appName} -n ${project}"
+   	sh "oc new-app ${appName} --image-stream=${DEV_PROJECT}/${appName}:latest -n ${project}"
+   	sh "oc expose svc ${appName} -n ${project}"
 }
 
 def version() {
