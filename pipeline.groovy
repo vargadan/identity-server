@@ -38,7 +38,7 @@ def envSetup(project, appName, recreate) {
 		sh "oc delete buildconfig,deploymentconfig,service,routes -l app=${appName} -n ${project}"
 	}
    	sh "oc new-app ${appName} --image-stream=${appName}:latest -n ${project}"
-   	sh "oc expose svc ${appName}"
+   	sh "oc expose svc ${appName} -n ${project}"
 }
 
 def version() {
