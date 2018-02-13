@@ -14,28 +14,7 @@ node('maven') {
    	}
    	
    	def version = version()
-
-   	stage ('Deploy DEV') {
-	   // create build. override the exit code since it complains about exising imagestream
-	   //tag for version in DEV imagestream
-	   sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${CICD_PROJECT}/${APP_NAME}:promotedToDEV"
-	}
-
-   stage ('Promote to QA') {
-     	timeout(time:10, unit:'MINUTES') {
-        		input message: "Promote to IT?", ok: "Promote"
-        }
-        //put into QA imagestream
-        sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${CICD_PROJECT}/${APP_NAME}:promotedToQA"
-	}
-	
-   stage ('Promote to PROD') {
-     	timeout(time:10, unit:'MINUTES') {
-        		input message: "Promote to IT?", ok: "Promote"
-        }
-        //put into QA imagestream
-        sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${CICD_PROJECT}/${APP_NAME}:promotedToPROD"
-	}
+   
 }
 
 def version() {
