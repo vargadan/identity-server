@@ -31,7 +31,7 @@ node('maven') {
         envSetup(QA_PROJECT)
 	}
 	
-	def envSetup(project, appName) {
+	def envSetup(project) {
 		sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${APP_NAME} -n ${project}"
 	   	sh "oc create dc ${APP_NAME} --image=reportengine-dev/identity-server:latest -n ${project}"
 		sh "oc expose dc ${APP_NAME} --port=8080 -n ${project}"
