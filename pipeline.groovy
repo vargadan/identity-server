@@ -20,7 +20,7 @@ node('maven') {
 	   	//tag for version in DEV imagestream
 	   	sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${CICD_PROJECT}/${APP_NAME}:version"
 	   	sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:latest"
-		envSetup(DEV_PROJECT, APP_NAME, 'latest', true)
+		envSetup(DEV_PROJECT, APP_NAME, 'latest')
 	}
 
    	stage ('Promote to QA') {
@@ -29,15 +29,13 @@ node('maven') {
         }
         //put into QA imagestream
         sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${QA_PROJECT}/${APP_NAME}:latest"
-        envSetup(QA_PROJECT, APP_NAME, 'latest', false)
+        envSetup(QA_PROJECT, APP_NAME, 'latest')
 	}
 
 }
 
 def envSetup(project, appName, version, recreate) {
-	if (recreate) {
-		sh "oc delete buildconfig,deploymentconfig,service,routes -l app=${appName} -n ${project}"
-	}
+	sh "oc delete buildconfig,deploymentconfig,service,routes -l app=${appName} -n ${project}"
    	sh "oc new-app ${appName}:${version} -n ${project}"
    	sh "oc expose svc ${appName} -n ${project}"
 }
