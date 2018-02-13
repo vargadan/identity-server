@@ -30,13 +30,13 @@ node('maven') {
         sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${QA_PROJECT}/${APP_NAME}:latest"
         envSetup(QA_PROJECT)
 	}
-}
-
-def envSetup(project) {
-	sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${APP_NAME} -n ${project}"
-   	sh "oc create dc ${APP_NAME} --image=reportengine-dev/identity-server:latest -n ${project}"
-	sh "oc expose dc ${APP_NAME} --port=8080 -n ${project}"
-	sh "oc expose svc ${APP_NAME} -n ${project}"
+	
+	def envSetup(project, appName) {
+		sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${APP_NAME} -n ${project}"
+	   	sh "oc create dc ${APP_NAME} --image=reportengine-dev/identity-server:latest -n ${project}"
+		sh "oc expose dc ${APP_NAME} --port=8080 -n ${project}"
+		sh "oc expose svc ${APP_NAME} -n ${project}"
+	}	
 }
 
 def version() {
