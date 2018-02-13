@@ -24,8 +24,8 @@ node('maven') {
      	timeout(time:10, unit:'MINUTES') {
         		input message: "Promote to IT?", ok: "Promote"
         }
-        sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:${version}"
-        sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${QA_PROJECT}/${APP_NAME}:promotedToQA"
+        //sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:${version}"
+        //sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${QA_PROJECT}/${APP_NAME}:latest"
 	   	// tag for stage
 	}
 }
