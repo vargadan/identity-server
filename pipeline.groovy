@@ -22,28 +22,18 @@ node('maven') {
    	def version = version()
 
    	stage ('Deploy DEV') {
-	   sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${APP_NAME} -n ${DEV_PROJECT}"
+	   // sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${APP_NAME} -n ${DEV_PROJECT}"
 	   // create build. override the exit code since it complains about exising imagestream
 	   sh "${mvnCmd} fabric8:deploy -DskipTests"
 	}
 
-   stage ('Deploy IT') {
-     	timeout(time:5, unit:'MINUTES') {
+   stage ('Promote to QA') {
+     	timeout(time:10, unit:'MINUTES') {
         		input message: "Promote to IT?", ok: "Promote"
         }
-	   sh "oc project ${IT_PROJECT}"
-	   // tag for stage
-	   sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${IT_PROJECT}/${APP_NAME}:${version}"
-	   // clean up. keep the imagestream
-	   sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${APP_NAME} -n ${IT_PROJECT}"
-	   // deploy stage image
-	   sh "oc new-app ${APP_NAME}:${version} -n ${IT_PROJECT}" 
-	   // delete service and route because new-app created them with wrong port
-	   // sh "oc delete svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
-	   // create service with the right port 
-	   // sh "oc expose dc ${APP_NAME} --port=${PORT}"
-	   // create route with the right port
-	   // sh "oc expose svc ${APP_NAME}"
+        sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:promotedToQA"
+	   	sh "oc project ${IT_PROJECT}"
+	   	// tag for stage
 	}
 }
 
