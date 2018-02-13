@@ -19,7 +19,7 @@ node('maven') {
 	   	// create build. override the exit code since it complains about exising imagestream
 	   	//tag for version in DEV imagestream
 	   	sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:latest"
-		envSetup(DEV_PROJECT)
+		envSetup(DEV_PROJECT, APP_NAME)
 	}
 
    	stage ('Promote to QA') {
@@ -28,16 +28,17 @@ node('maven') {
         }
         //put into QA imagestream
         sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${QA_PROJECT}/${APP_NAME}:latest"
-        envSetup(QA_PROJECT)
+        envSetup(QA_PROJECT, APP_NAME)
 	}
-	
-	def envSetup(project) {
-		sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${APP_NAME} -n ${project}"
-	   	sh "oc create dc ${APP_NAME} --image=reportengine-dev/identity-server:latest -n ${project}"
-		sh "oc expose dc ${APP_NAME} --port=8080 -n ${project}"
-		sh "oc expose svc ${APP_NAME} -n ${project}"
-	}	
+
 }
+
+def envSetup(project, appName) {
+	sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${appName} -n ${project}"
+   	sh "oc create dc ${appName} --image=reportengine-dev/identity-server:latest -n ${project}"
+	sh "oc expose dc ${appName} --port=8080 -n ${project}"
+	sh "oc expose svc ${appName} -n ${project}"
+}	
 
 def version() {
   def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
