@@ -18,8 +18,9 @@ node('maven') {
 	stage ('Deploy DEV') {
 	   	// create build. override the exit code since it complains about exising imagestream
 	   	//tag for version in DEV imagestream
+	   	sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${CICD_PROJECT}/${APP_NAME}:version"
 	   	sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:latest"
-		envSetup(DEV_PROJECT, APP_NAME, version, true)
+		envSetup(DEV_PROJECT, APP_NAME, 'latest', true)
 	}
 
    	stage ('Promote to QA') {
@@ -28,7 +29,7 @@ node('maven') {
         }
         //put into QA imagestream
         sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${QA_PROJECT}/${APP_NAME}:latest"
-        envSetup(QA_PROJECT, APP_NAME, version, false)
+        envSetup(QA_PROJECT, APP_NAME, 'latest', false)
 	}
 
 }
