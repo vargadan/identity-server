@@ -37,7 +37,7 @@ def envSetup(project, appName, recreate) {
 	if (recreate) {
 		sh "oc delete buildconfig,deploymentconfig,service,routes -l app=${appName} -n ${project}"
 	}
-   	sh "oc new-app ${appName} --image-stream=${DEV_PROJECT}/${appName}:latest -n ${project}"
+   	sh "oc new-app ${appName} --image-stream=${project}/${appName}:latest -n ${project}"
    	sh "oc expose svc ${appName} -n ${project}"
 }
 
