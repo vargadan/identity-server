@@ -23,7 +23,7 @@ node('maven') {
 		envSetup(DEV_PROJECT, APP_NAME, 'latest')
 	}
 
-   	stage ('Promote to QA') {
+   	stage ('Deploy to QA') {
      	timeout(time:10, unit:'MINUTES') {
         		input message: "Promote to QA?", ok: "Promote"
         }
