@@ -18,15 +18,16 @@ node('maven') {
    		sh "oc project ${DEV_PROJECT}"
 	   // create build. override the exit code since it complains about exising imagestream
 	   sh "${mvnCmd} fabric8:deploy -DskipTests"
+	   //tag for version in DEV imagestream
+	   sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:${version}"
 	}
 
    stage ('Promote to QA') {
      	timeout(time:10, unit:'MINUTES') {
         		input message: "Promote to IT?", ok: "Promote"
         }
-        //sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:${version}"
-        //sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${QA_PROJECT}/${APP_NAME}:latest"
-	   	// tag for stage
+        //put into QA imagestream
+        sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${QA_PROJECT}/${APP_NAME}:latest"
 	}
 }
 
