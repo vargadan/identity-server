@@ -34,7 +34,7 @@ node('maven') {
 
 }
 
-def envSetup(project, appName, version, recreate) {
+def envSetup(project, appName, version) {
 	sh "oc delete buildconfig,deploymentconfig,service,routes -l app=${appName} -n ${project}"
    	sh "oc new-app ${appName}:${version} -n ${project}"
    	sh "oc expose svc ${appName} -n ${project}"
