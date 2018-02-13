@@ -2,18 +2,11 @@ node('maven') {
    	// define commands
    	def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
    	def DEV_PROJECT = "reportengine-dev"
-   	def IT_PROJECT = "reportengine-it"
+   	def QA_PROJECT = "reportengine-qa"
+   	def PROD_PROJECT = "reportengine-prod"
    	def PORT = 8080
    	def APP_NAME = "identity-server"
-   	
-   	stage ('Init') {
-   	   //  show service account with context
-   	   sh "oc whoami"
-   	   // check if it has access to project
-	   sh "oc project ${DEV_PROJECT}"
-   	}
-   	
-
+ 
    	stage ('Build') {
    		git branch: 'master', url: 'https://github.com/vargadan/identity-server.git'
    		sh "${mvnCmd} clean package -DskipTests=true"
@@ -31,7 +24,8 @@ node('maven') {
      	timeout(time:10, unit:'MINUTES') {
         		input message: "Promote to IT?", ok: "Promote"
         }
-        sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:promotedToQA"
+        sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:${version}"
+        sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${QA_PROJECT}/${APP_NAME}:promotedToQA"
 	   	// tag for stage
 	}
 }
