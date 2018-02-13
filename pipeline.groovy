@@ -34,10 +34,10 @@ node('maven') {
 }
 
 def envSetup(project, appName) {
-	sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${appName} -n ${project}"
-   	sh "oc create dc ${appName} --image=reportengine-dev/identity-server:latest -n ${project}"
-	sh "oc expose dc ${appName} --port=8080 -n ${project}"
-	sh "oc expose svc ${appName} -n ${project}"
+	sh "oc delete buildconfig,deploymentconfig,service,routes -l app=${appName} -n ${project}"
+   	sh "oc create dc ${appName} --image=reportengine-dev/identity-server:latest -l app=${appName} -n ${project}"
+	sh "oc expose dc ${appName} --port=8080 -l app=${appName} -n ${project}"
+	sh "oc expose svc ${appName} -l app=${appName} -n ${project}"
 }	
 
 def version() {
