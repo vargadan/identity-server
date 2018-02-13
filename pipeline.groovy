@@ -15,7 +15,7 @@ node('maven') {
    	def version = version()
 
    	stage ('Deploy DEV') {
-	   // sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${APP_NAME} -n ${DEV_PROJECT}"
+   		sh "oc project ${DEV_PROJECT}"
 	   // create build. override the exit code since it complains about exising imagestream
 	   sh "${mvnCmd} fabric8:deploy -DskipTests"
 	}
