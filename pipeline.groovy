@@ -14,7 +14,29 @@ node('maven') {
    	}
    	
    	def version = version()
-   
+   	
+	stage ('Deploy DEV') {
+	   	// create build. override the exit code since it complains about exising imagestream
+	   	//tag for version in DEV imagestream
+	   	sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${DEV_PROJECT}/${APP_NAME}:latest"
+		envSetup(DEV_PROJECT)
+	}
+
+   	stage ('Promote to QA') {
+     	timeout(time:10, unit:'MINUTES') {
+        		input message: "Promote to QA?", ok: "Promote"
+        }
+        //put into QA imagestream
+        sh "oc tag ${CICD_PROJECT}/${APP_NAME}:latest ${QA_PROJECT}/${APP_NAME}:latest"
+        envSetup(QA_PROJECT)
+	}
+}
+
+def envSetup(project) {
+	sh "oc delete buildconfigs,deploymentconfigs,services,routes -l app=${APP_NAME} -n ${project}"
+   	sh "oc create dc ${APP_NAME} --image=reportengine-dev/identity-server:latest -n ${project}"
+	sh "oc expose dc ${APP_NAME} --port=8080 -n ${project}"
+	sh "oc expose svc ${APP_NAME} -n ${project}"
 }
 
 def version() {
