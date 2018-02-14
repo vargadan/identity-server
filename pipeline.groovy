@@ -1,4 +1,5 @@
 node('maven') {
+	def APP_NAME = "identity-server"
    	// define commands
    	def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
    	def CICD_PROJECT = "reportengine-cicd"
@@ -6,11 +7,10 @@ node('maven') {
    	def QA_PROJECT = "reportengine-qa"
    	def PROD_PROJECT = "reportengine-prod"
    	def PORT = 8080
-   	def APP_NAME = "identity-server"
    	def GIT_URL = "https://github.com/vargadan/${APP_NAME}.git"
    	def SKIP_TEST = "true"
  
-   	stage ('Build (skipTests=${SKIP_TEST})') {
+   	stage ('Build') {
    		git branch: 'master', url: "${GIT_URL}"
    		sh "${mvnCmd} clean package -DskipTests=${SKIP_TEST} fabric8:build"
    	}
