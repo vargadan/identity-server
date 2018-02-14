@@ -7,9 +7,10 @@ node('maven') {
    	def PROD_PROJECT = "reportengine-prod"
    	def PORT = 8080
    	def APP_NAME = "identity-server"
+   	def GIT_URL = "https://github.com/vargadan/${APP_NAME}.git"
  
    	stage ('Build') {
-   		git branch: 'master', url: 'https://github.com/vargadan/identity-server.git'
+   		git branch: 'master', url: '${GIT_URL}'
    		sh "${mvnCmd} clean package -DskipTests=true fabric8:build"
    	}
    	
