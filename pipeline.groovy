@@ -10,7 +10,7 @@ node('maven') {
    	def GIT_URL = "https://github.com/vargadan/${APP_NAME}.git"
  
    	stage ('Build') {
-   		git branch: 'master', url: '${GIT_URL}'
+   		git branch: 'master', url: "${GIT_URL}"
    		sh "${mvnCmd} clean package -DskipTests=true fabric8:build"
    	}
    	
