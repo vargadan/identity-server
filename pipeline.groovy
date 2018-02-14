@@ -8,10 +8,11 @@ node('maven') {
    	def PORT = 8080
    	def APP_NAME = "identity-server"
    	def GIT_URL = "https://github.com/vargadan/${APP_NAME}.git"
+   	def SKIP_TEST = "true"
  
-   	stage ('Build') {
+   	stage ('Build (skipTests=${SKIP_TEST})') {
    		git branch: 'master', url: "${GIT_URL}"
-   		sh "${mvnCmd} clean package -DskipTests=true fabric8:build"
+   		sh "${mvnCmd} clean package -DskipTests=${SKIP_TEST} fabric8:build"
    	}
    	
    	def version = version()
